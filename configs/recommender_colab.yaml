@@ -1,0 +1,39 @@
+project:
+  name: steam_games_recommendation
+  task: top_k_recommendation
+
+paths:
+  data_dir: data
+  reviews_file: recommendations.csv
+  games_file: games.csv
+  output_dir: runs/steam_recommender_colab
+  model_dir: models
+
+columns:
+  user_id: user_id
+  item_id: app_id
+  feedback: is_recommended
+  title: title
+  popularity: user_reviews
+
+data:
+  implicit_positive_only: true
+  # Keep the first Colab run small enough for the free runtime.
+  # Increase this after a successful smoke test.
+  top_n_games_by_reviews: 100
+  min_user_interactions: 2
+  test_size: 0.20
+  random_seed: 42
+  review_chunksize: 500000
+
+models:
+  item_knn:
+    enabled: true
+    k_neighbors: 30
+  user_knn:
+    # User-user KNN is implemented, but can be slow with many users.
+    enabled: false
+    k_neighbors: 30
+
+evaluation:
+  top_k: 10
